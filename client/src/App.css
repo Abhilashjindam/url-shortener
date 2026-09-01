@@ -1,0 +1,566 @@
+/*
+ * App.css — Design System
+ *
+ * DESIGN PHILOSOPHY:
+ *   The action IS the product. A URL shortener's entire job is one input box.
+ *   So the form is the hero — large, central, impossible to miss.
+ *   Everything else (history, metadata) is subordinate.
+ *
+ * DESIGN TOKENS (CSS Variables):
+ *   Instead of hardcoding colors everywhere, we define them once here.
+ *   If you want to change the primary color, you change ONE line.
+ *   This is standard practice in professional frontend work.
+ */
+
+:root {
+  /* Color palette — deep slate + electric violet accent */
+  --primary:        #5B21B6;   /* deep violet — distinctive, not generic indigo */
+  --primary-hover:  #4C1D95;
+  --primary-light:  #EDE9FE;
+  --primary-text:   #6D28D9;
+
+  --success:        #059669;
+  --success-light:  #D1FAE5;
+
+  --danger:         #DC2626;
+  --danger-light:   #FEE2E2;
+
+  --text:           #111827;   /* near-black */
+  --text-muted:     #6B7280;
+  --text-faint:     #9CA3AF;
+
+  --bg:             #F9FAFB;   /* off-white — not pure white, not cream */
+  --surface:        #FFFFFF;
+  --border:         #E5E7EB;
+  --border-focus:   #A78BFA;
+
+  --shadow-sm:  0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md:  0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.05);
+  --shadow-lg:  0 10px 25px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
+
+  --radius:     14px;
+  --radius-sm:  8px;
+  --radius-xs:  5px;
+}
+
+/* ───────────────────────────────────────── */
+/* BASE                                      */
+/* ───────────────────────────────────────── */
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ───────────────────────────────────────── */
+/* LAYOUT                                    */
+/* ───────────────────────────────────────── */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ───────────────────────────────────────── */
+/* HEADER                                    */
+/* ───────────────────────────────────────── */
+
+.header {
+  background: var(--primary);
+  padding: 3.5rem 1.5rem 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle decorative rings — conveys "links / connectivity" */
+.header::before,
+.header::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.1);
+  pointer-events: none;
+}
+
+.header::before {
+  width: 320px;
+  height: 320px;
+  top: -120px;
+  right: -80px;
+}
+
+.header::after {
+  width: 200px;
+  height: 200px;
+  bottom: -80px;
+  left: -40px;
+}
+
+.header-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.logo-mark {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.logo-name {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.75px;
+}
+
+.logo-name span {
+  color: #C4B5FD; /* lighter violet for contrast */
+}
+
+.tagline {
+  color: rgba(255,255,255,0.75);
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+/* ───────────────────────────────────────── */
+/* CARD                                      */
+/* ───────────────────────────────────────── */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  padding: 1.75rem;
+}
+
+/* ───────────────────────────────────────── */
+/* SHORTEN FORM                              */
+/* ───────────────────────────────────────── */
+
+.shorten-card {
+  box-shadow: var(--shadow-lg);
+}
+
+.card-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--primary-text);
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+
+.input-row {
+  display: flex;
+  gap: 0.625rem;
+}
+
+.url-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.url-input::placeholder {
+  color: var(--text-faint);
+}
+
+.url-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(167,139,250,0.15);
+  background: var(--surface);
+}
+
+.url-input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ───────────────────────────────────────── */
+/* BUTTONS                                   */
+/* ───────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1.2rem;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, opacity 0.15s;
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid var(--border);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  border-color: var(--border-focus);
+  color: var(--primary-text);
+}
+
+.btn-copy {
+  background: var(--primary-light);
+  color: var(--primary-text);
+  border: 1.5px solid #DDD6FE;
+  padding: 0.55rem 1rem;
+  font-size: 0.82rem;
+}
+
+.btn-copy:hover:not(:disabled) {
+  background: #DDD6FE;
+}
+
+.btn-copy.is-copied {
+  background: var(--success-light);
+  color: var(--success);
+  border-color: #6EE7B7;
+}
+
+.btn-danger {
+  background: var(--danger-light);
+  color: var(--danger);
+  border: 1.5px solid #FECACA;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.8rem;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: var(--danger);
+  color: #fff;
+}
+
+.btn-sm {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.8rem;
+}
+
+/* ───────────────────────────────────────── */
+/* ERROR                                     */
+/* ───────────────────────────────────────── */
+
+.error-msg {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  background: var(--danger-light);
+  border: 1px solid #FECACA;
+  border-radius: var(--radius-xs);
+  color: var(--danger);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* ───────────────────────────────────────── */
+/* RESULT BOX                                */
+/* ───────────────────────────────────────── */
+
+.result-box {
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  background: var(--primary-light);
+  border: 1.5px solid #DDD6FE;
+  border-radius: var(--radius-sm);
+  animation: slideIn 0.2s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.result-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--primary-text);
+  background: #DDD6FE;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  margin-bottom: 0.85rem;
+}
+
+.result-link-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.result-short-url {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--primary);
+  word-break: break-all;
+}
+
+.result-short-url:hover {
+  text-decoration: underline;
+}
+
+.result-original {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ───────────────────────────────────────── */
+/* HISTORY SECTION                           */
+/* ───────────────────────────────────────── */
+
+.history-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.history-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.count-pill {
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+
+.url-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+/* ───────────────────────────────────────── */
+/* URL CARD                                  */
+/* ───────────────────────────────────────── */
+
+.url-card {
+  padding: 1.1rem 1.4rem;
+  transition: box-shadow 0.15s, opacity 0.2s;
+}
+
+.url-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.url-card.is-deleting {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.url-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.875rem;
+}
+
+.url-card-info {
+  flex: 1;
+  min-width: 0; /* allows truncation */
+}
+
+.url-short-link {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.3rem;
+}
+
+.url-short-link:hover {
+  text-decoration: underline;
+}
+
+.url-long {
+  font-size: 0.79rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.url-card-stats {
+  display: flex;
+  gap: 1.25rem;
+  flex-shrink: 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.stat-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.url-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* ───────────────────────────────────────── */
+/* EMPTY STATE                               */
+/* ───────────────────────────────────────── */
+
+.empty-state {
+  text-align: center;
+  padding: 3.5rem 2rem;
+  color: var(--text-muted);
+}
+
+.empty-icon {
+  font-size: 2.25rem;
+  display: block;
+  margin-bottom: 0.85rem;
+  opacity: 0.6;
+}
+
+.empty-text {
+  font-size: 0.9rem;
+}
+
+/* ───────────────────────────────────────── */
+/* LOADING                                   */
+/* ───────────────────────────────────────── */
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* ───────────────────────────────────────── */
+/* FOOTER                                    */
+/* ───────────────────────────────────────── */
+
+.footer {
+  text-align: center;
+  padding: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--text-faint);
+  border-top: 1px solid var(--border);
+}
+
+.footer a {
+  color: var(--primary-text);
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+/* ───────────────────────────────────────── */
+/* RESPONSIVE                                */
+/* ───────────────────────────────────────── */
+
+@media (max-width: 560px) {
+  .input-row {
+    flex-direction: column;
+  }
+
+  .url-card-top {
+    flex-direction: column;
+  }
+
+  .url-card-stats {
+    align-self: flex-start;
+  }
+
+  .header {
+    padding: 2.5rem 1.25rem 2rem;
+  }
+
+  .logo-name {
+    font-size: 1.6rem;
+  }
+}
