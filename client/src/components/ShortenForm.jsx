@@ -33,15 +33,15 @@
 import { useState } from 'react';
 
 function ShortenForm({ onNewUrl }) {
-  const [longUrl, setLongUrl]   = useState('');  // What the user types
-  const [result, setResult]     = useState(null); // The API response (shortened URL)
+  const [longUrl, setLongUrl]   = useState('');
+  const [alias, setAlias]       = useState('');   // new — custom alias input
+  const [result, setResult]     = useState(null);
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState('');
   const [copied, setCopied]     = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent page refresh on form submit
-
+    e.preventDefault();
     const trimmed = longUrl.trim();
     if (!trimmed) {
       setError('Please paste a URL first.');
@@ -54,31 +54,35 @@ function ShortenForm({ onNewUrl }) {
     setCopied(false);
 
     try {
+      // Build the request body
+      // If alias is filled in, include it — otherwise just send longUrl
+      const body = { longUrl: trimmed };
+      if (alias.trim()) {
+        body.alias = alias.trim();
+      }
+
       const res = await fetch('/api/shorten', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // Tell the server we're sending JSON
-        },
-        body: JSON.stringify({ longUrl: trimmed }), // Convert JS object → JSON string
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
       });
 
-      const data = await res.json(); // Parse the JSON response → JS object
+      const data = await res.json();
 
       if (!res.ok) {
-        // Server returned an error (400, 404, 500, etc.)
         setError(data.error || 'Something went wrong.');
         return;
       }
 
       setResult(data);
-      onNewUrl(data); // Notify parent (App.jsx) so it updates the history list
-      setLongUrl('');  // Clear the input after success
+      onNewUrl(data);
+      setLongUrl('');
+      setAlias('');  // clear alias input after success
 
     } catch (err) {
-      // Network error — server probably not running
-      setError('Cannot reach the server. Make sure it\'s running on port 5000.');
+      setError("Cannot reach the server. Make sure it's running on port 5000.");
     } finally {
-      setLoading(false); // Always runs, success or failure
+      setLoading(false);
     }
   };
 
@@ -86,9 +90,8 @@ function ShortenForm({ onNewUrl }) {
     try {
       await navigator.clipboard.writeText(result.shortUrl);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000); // Reset button after 2 seconds
+      setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback for browsers that block clipboard without HTTPS
       alert('Copy failed — try selecting and copying manually.');
     }
   };
@@ -113,6 +116,23 @@ function ShortenForm({ onNewUrl }) {
               {loading ? 'Working…' : 'Shorten →'}
             </button>
           </div>
+
+          {/* Custom alias input — optional */}
+          <div className="alias-row">
+            <span className="alias-prefix">
+              {window.location.hostname === 'localhost'
+                ? 'localhost:5000/'
+                : window.location.hostname + '/'}
+            </span>
+            <input
+              type="text"
+              className="alias-input"
+              placeholder="custom-alias (optional)"
+              value={alias}
+              onChange={(e) => setAlias(e.target.value)}
+              disabled={loading}
+            />
+          </div>
         </form>
 
         {error && <div className="error-msg">⚠ {error}</div>}
@@ -121,8 +141,8 @@ function ShortenForm({ onNewUrl }) {
           <div className="result-box">
             <span className="result-badge">Ready to share</span>
             <div className="result-link-row">
-              <a
-                href={result.shortUrl}
+              
+              <a href={result.shortUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="result-short-url"

@@ -564,3 +564,36 @@ a {
     font-size: 1.6rem;
   }
 }
+
+/* Custom alias input row */
+.alias-row {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  gap: 0;
+}
+
+.alias-prefix {
+  background: #e9e4f5;
+  color: #6c3fc5;
+  padding: 10px 12px;
+  border-radius: 8px 0 0 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  border: 1px solid #ccc;
+  border-right: none;
+}
+
+.alias-input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.alias-input:focus {
+  border-color: #6c3fc5;
+}

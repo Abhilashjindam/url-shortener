@@ -25,10 +25,26 @@
 
 const express = require('express');
 const router = express.Router();
-const { shortenUrl, getAllUrls, deleteUrl } = require('../controllers/urlController');
+const { shortenUrl, getAllUrls, deleteUrl, getStats } = require('../controllers/urlController');
+const rateLimiter = require('../middleware/rateLimiter');
 
-router.post('/shorten', shortenUrl);        // Create a short URL
-router.get('/urls', getAllUrls);            // Get all URLs (for history table)
-router.delete('/urls/:id', deleteUrl);     // Delete a URL by ID
+/*
+ * WHY only apply rate limiting to /shorten?
+ *
+ *   POST /shorten  — writes to MongoDB, generates IDs. Expensive. Needs protection.
+ *   GET  /urls     — just reads data. Fast, harmless, no need to limit.
+ *   DELETE /urls/:id — could also be rate limited, but less critical for portfolio.
+ *
+ * rateLimiter is passed as a MIDDLEWARE ARGUMENT before the controller function.
+ * Express runs middleware left to right:
+ *   Request → rateLimiter() → shortenUrl()
+ * If rateLimiter calls next(), shortenUrl runs.
+ * If rateLimiter sends a 429 response, shortenUrl never runs.
+ */
+
+router.post('/shorten', rateLimiter, shortenUrl);  // rate limited
+router.get('/urls', getAllUrls);                    // get all urls
+router.delete('/urls/:id', deleteUrl);             // delete a url
+router.get('/stats/:code', getStats);              // analytics for a single url
 
 module.exports = router;

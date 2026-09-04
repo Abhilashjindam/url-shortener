@@ -25,6 +25,10 @@ const dotenv = require('dotenv');
 // Must be called FIRST — loads .env file into process.env
 dotenv.config();
 
+// Redis must be required AFTER dotenv.config() so process.env values are available 
+const redis = require("./redis");
+redis.connect().then(()=> console.log("Redis connect() called")).catch(() => {});
+
 const app = express();
 
 // ══════════════════════════════════════════
